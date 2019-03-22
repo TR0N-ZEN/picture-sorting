@@ -4,6 +4,8 @@ import shutil
 import pathlib
 
 path = "C:\\Users\\Emil\\Desktop\\picture sorting\\"
+os.chdir(path)
+os.getcwd()
 
 mon = {
     "01" : "Januar",
@@ -23,8 +25,7 @@ mon = {
 for dirpath, dirnames, filenames in os.walk(path):
     for f in filenames:
         if f.find(".JPG") != -1:
-            print(f)
-            picobj = open(f,"rb")
+            picobj = open(f, "rb")
             header = str(picobj.read(761))
             # print(header)
             pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39

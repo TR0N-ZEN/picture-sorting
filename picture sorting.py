@@ -40,13 +40,16 @@ for dirpath, dirnames, filenames in os.walk(path):
             day = str(z[2])
             date = year + "\\" + mon[month] + "\\" + day
             # print(date)
-            source = str(dirpath) + str(f)
+            source = dirpath + f
             destinationfolder = "C:\\Users\\Emil\\Desktop\\sorted\\" + date + "\\"
             destination = "C:\\Users\\Emil\\Desktop\\sorted\\" + date + "\\" + f
             # print(source)
             # print(destination)
+            # print(os.path.isdir(destinationfolder))
             if os.path.isdir(destinationfolder) == True:
-                shutil.move(source, destination)
+                print("move it")
+                # shutil.move(source, destination)
             else:
-                os.makedirs(destinationfolder)
-                shutil.move(source, destination)
+                print("make dirs and move it")
+                # os.makedirs(destinationfolder)
+                # shutil.move(source, destination)

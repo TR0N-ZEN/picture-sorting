@@ -25,16 +25,16 @@ mon = {
 for dirpath, dirnames, filenames in os.walk(path):
     for f in filenames:
         if f.find(".JPG") != -1:
-            picobj = open(f, "rb")
-            header = str(picobj.read(761))
-            # print(header)
-            pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39
-            # print(pos)
-            x = pos + 10
-            # print(x)
-            y = header[pos:x]
-            # print(y)
-            z = y.split(":")
+            with open(f, "rb") as picobj:
+                header = str(picobj.read(761))
+                # print(header)
+                pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39
+                # print(pos)
+                x = pos + 10
+                # print(x)
+                y = header[pos:x]
+                # print(y)
+                z = y.split(":")
             year = str(z[0])
             month = str(z[1])
             day = str(z[2])
@@ -47,9 +47,9 @@ for dirpath, dirnames, filenames in os.walk(path):
             # print(destination)
             # print(os.path.isdir(destinationfolder))
             if os.path.isdir(destinationfolder) == True:
-                print("move it")
-                # shutil.move(source, destination)
+                # print("move it")
+                shutil.move(source, destination)
             else:
-                print("make dirs and move it")
-                # os.makedirs(destinationfolder)
-                # shutil.move(source, destination)
+                # print("make dirs and move it")
+                os.makedirs(destinationfolder)
+                shutil.move(source, destination)

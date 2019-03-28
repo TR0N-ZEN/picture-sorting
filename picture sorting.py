@@ -24,14 +24,15 @@ mon = {
 
 faillist = []
 x = 0
+global time
 
 def find_date_deep(pos,header):
     pos = header.find(":", pos)
     if header[pos-4:pos+6].find("x") != -1:
         find_date_deep(pos + 1,header)
     else:
-        a = header[pos-4:pos+6]
-        return a
+        global time
+        time = header[pos-4:pos+6]
 
 def sort(excerpt,f,dirpath):
     z = excerpt.split(":")
@@ -68,8 +69,7 @@ for dirpath, dirnames, filenames in os.walk(mpath):
                 header = str(picobj.read(5000))
             pos = header.find(":")
             if header[pos-4:pos+6].find("x") != -1: # check if header[x:x] returns something thats not the date info
-                excerpt = find_date_deep(pos,header)
-                print(excerpt)
-                # sort(excerpt,f,dirpath)
+                find_date_deep(pos,header)
+                sort(time,f,dirpath)
             else:
                 sort(header[pos-4:pos+6],f,dirpath)

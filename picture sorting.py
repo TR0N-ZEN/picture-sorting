@@ -3,8 +3,8 @@ import datetime
 import shutil
 import pathlib
 
-path = "E:\\Users\\Haimitch\\Bilder\\others\\Muttis Kamera\\Neue\\"
-os.chdir(path)
+mpath = "E:\\Users\\Haimitch\\Bilder\\others\\Muttis Kamera\\sortiert"
+os.chdir(mpath)
 os.getcwd()
 
 mon = {
@@ -24,41 +24,45 @@ mon = {
 
 faillist = []
 x = 0
-for dirpath, dirnames, filenames in os.walk(path):
+
+for dirpath, dirnames, filenames in os.walk(mpath):
     for f in filenames:
+        source = os.path.join(dirpath,f)
         f_name,f_ext = os.path.splitext(f)
         if f_ext == ".JPG":
             # print("JPG file found")
-            try:
-                with open(dirpath + "\\" + f, "rb") as picobj:
-                    header = str(picobj.read(5000))
-                    # pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39
-                    # x = pos + 10
-                    # y = header[pos:x]
-                    pos = header.find(":")
-                    if header[pos-4:pos+6].find("x") == -1:
-                        print(header[pos-4:pos+6])
-                    # print(y)
-                    z = header[pos-4:pos+6].split(":")
-                    year = str(z[0])
-                    # print(year)
-                    month = str(z[1])
-                    #  day = str(z[2])
-                    date = year + "\\" + mon[month] + "\\" # + day
-                    # print(date)
-                    source = dirpath + "\\" + f
-                    destinationfolder = "E:\\sorted pictures\\" + date + "\\"
-                    destination = "E:\\sorted pictures\\" + date + "\\" + f
-                    # print(source)
-                    # print(destination)
-                    # print(os.path.isdir(destinationfolder))
-                    if os.path.isdir(destinationfolder) == True:
-                        # print("move it")
-                        shutil.move(source, destination)
-                    else:
-                        # print("make dirs and move it")
-                        os.makedirs(destinationfolder)
-                        shutil.move(source, destination)
-            except:
-                x = x + 1
-print(x)
+            with open(source,"rb") as picobj:
+                header = str(picobj.read(5000))
+                # pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39
+                # x = pos + 10
+                # y = header[pos:x]
+            pos = header.find(":")
+            # print(y)
+            if header[pos-4:pos+6].find("x") != -1:
+                pos = header.find(":",header[pos-4:pos+6].find("x"))
+                if header[pos-4:pos+6].find("x") != -1:
+                    print(header[pos-4:pos+6])
+            else:
+                z = header[pos-4:pos+6].split(":")
+                year = str(z[0])
+                # print(year)
+                month = str(z[1])
+                # day = str(z[2])
+                date = year + "\\" + mon[month] # + day
+                # print(date)
+                destinationfolder = "E:\\sorted pictures\\" + date + "\\"
+                destination = "E:\\sorted pictures\\" + date + "\\" + f
+                # print(source)
+                # print(destination)
+                # print(os.path.isdir(destinationfolder))
+                if os.path.isdir(destinationfolder) == True:
+                    print("move it")
+                    shutil.move(source,destination)
+                    if os.path.isfile(destination) == True:
+                        print("success final")
+                else:
+                    # print("make dirs and move it")
+                    os.makedirs(destinationfolder)
+                    shutil.move(source,destination)
+                    if os.path.isfile(destination) == True:
+                        print("success final")

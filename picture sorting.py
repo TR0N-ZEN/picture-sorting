@@ -30,8 +30,33 @@ def find_date_deep(pos,header):
     if header[pos-4:pos+6].find("x") != -1:
         find_date_deep(pos + 1,header)
     else:
-        print("found date")
-        return header[pos-4:pos+6]
+        a = header[pos-4:pos+6]
+        return a
+
+def sort(excerpt,f,dirpath):
+    z = excerpt.split(":")
+    year = str(z[0])
+    # print(year)
+    month = str(z[1])
+    # day = str(z[2])
+    date = year + "\\" + mon[month] # + day
+    # print(date)
+    destinationfolder = "E:\\sorted pictures\\" + date + "\\"
+    destination = "E:\\sorted pictures\\" + date + "\\" + f
+    # print(source)
+    # print(destination)
+    # print(os.path.isdir(destinationfolder))
+    if os.path.isdir(destinationfolder) == True:
+        print("move it")
+        shutil.move(source,destination)
+        if os.path.isfile(destination) == True:
+            print("success final")
+        else:
+            # print("make dirs and move it")
+            os.makedirs(destinationfolder)
+            shutil.move(source,destination)
+            if os.path.isfile(destination) == True:
+                print("success final")
 
 for dirpath, dirnames, filenames in os.walk(mpath):
     for f in filenames:
@@ -43,28 +68,8 @@ for dirpath, dirnames, filenames in os.walk(mpath):
                 header = str(picobj.read(5000))
             pos = header.find(":")
             if header[pos-4:pos+6].find("x") != -1: # check if header[x:x] returns something thats not the date info
-                pos = find_date_deep(pos,header)
+                excerpt = find_date_deep(pos,header)
+                print(excerpt)
+                # sort(excerpt,f,dirpath)
             else:
-                z = header[pos-4:pos+6].split(":")
-                year = str(z[0])
-                # print(year)
-                month = str(z[1])
-                # day = str(z[2])
-                date = year + "\\" + mon[month] # + day
-                # print(date)
-                destinationfolder = "E:\\sorted pictures\\" + date + "\\"
-                destination = "E:\\sorted pictures\\" + date + "\\" + f
-                # print(source)
-                # print(destination)
-                # print(os.path.isdir(destinationfolder))
-                if os.path.isdir(destinationfolder) == True:
-                    print("move it")
-                    shutil.move(source,destination)
-                    if os.path.isfile(destination) == True:
-                        print("success final")
-                else:
-                    # print("make dirs and move it")
-                    os.makedirs(destinationfolder)
-                    shutil.move(source,destination)
-                    if os.path.isfile(destination) == True:
-                        print("success final")
+                sort(header[pos-4:pos+6],f,dirpath)

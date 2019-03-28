@@ -25,6 +25,14 @@ mon = {
 faillist = []
 x = 0
 
+def find_date_deep(pos,header):
+    pos = header.find(":", pos)
+    if header[pos-4:pos+6].find("x") != -1:
+        find_date_deep(pos + 1,header)
+    else:
+        print("found date")
+        return header[pos-4:pos+6]
+
 for dirpath, dirnames, filenames in os.walk(mpath):
     for f in filenames:
         source = os.path.join(dirpath,f)
@@ -33,15 +41,9 @@ for dirpath, dirnames, filenames in os.walk(mpath):
             # print("JPG file found")
             with open(source,"rb") as picobj:
                 header = str(picobj.read(5000))
-                # pos = header.find("Digital Camera FinePix XP30 Ver1.01") + 39
-                # x = pos + 10
-                # y = header[pos:x]
             pos = header.find(":")
-            # print(y)
-            if header[pos-4:pos+6].find("x") != -1:
-                pos = header.find(":",header[pos-4:pos+6].find("x"))
-                if header[pos-4:pos+6].find("x") != -1:
-                    print(header[pos-4:pos+6])
+            if header[pos-4:pos+6].find("x") != -1: # check if header[x:x] returns something thats not the date info
+                pos = find_date_deep(pos,header)
             else:
                 z = header[pos-4:pos+6].split(":")
                 year = str(z[0])
